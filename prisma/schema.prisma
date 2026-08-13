@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  user
+  admin
+}
+
+enum UserStatus {
+  active
+  blocked
+}
+
+enum AuthProvider {
+  email
+  yandex_id
+  vk_id
+}
+
+enum LeadStatus {
+  new
+  contacted
+  done
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  displayName   String?
+  role          UserRole       @default(user)
+  status        UserStatus     @default(active)
+  createdAt     DateTime       @default(now())
+  authIdentities AuthIdentity[]
+  authSessions  AuthSession[]
+
+  @@map("users")
+}
+
+model AuthIdentity {
+  id             String       @id @default(cuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider       AuthProvider
+  providerUserId String
+  email          String?
+  createdAt      DateTime     @default(now())
+
+  @@unique([provider, providerUserId])
+  @@index([userId])
+  @@map("auth_identities")
+}
+
+model AuthSession {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  userAgent String?
+  ip        String?
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@map("auth_sessions")
+}
+
+model EmailAuthCode {
+  id           String    @id @default(cuid())
+  email        String
+  codeHash     String
+  purpose      String    @default("login")
+  expiresAt    DateTime
+  consumedAt   DateTime?
+  attemptCount Int       @default(0)
+  createdAt    DateTime  @default(now())
+
+  @@index([email, purpose, consumedAt])
+  @@map("email_auth_codes")
+}
+
+model HubApplication {
+  id                 String     @id @default(cuid())
+  name               String
+  email              String
+  phone              String
+  projectDescription String
+  status             LeadStatus @default(new)
+  createdAt          DateTime   @default(now())
+
+  @@map("hub_applications")
+}
+
+model ExpertMeetingRequest {
+  id         String     @id @default(cuid())
+  name       String
+  email      String
+  phone      String
+  expertSlug String
+  message    String?
+  status     LeadStatus @default(new)
+  createdAt  DateTime   @default(now())
+
+  @@map("expert_meeting_requests")
+}

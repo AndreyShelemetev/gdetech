@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: var(--font-space-grotesk), "Segoe UI", sans-serif;
+  --font-sans: var(--font-inter), "Segoe UI", sans-serif;
+
+  --color-bg: #05070f;
+  --color-bg-elevated: #0a0e1c;
+  --color-surface: #0e1326;
+  --color-surface-hover: #131a33;
+  --color-border: #1f2740;
+  --color-border-soft: #171d33;
+
+  --color-text: #f4f6ff;
+  --color-text-muted: #9aa3c7;
+  --color-text-faint: #616b93;
+
+  --color-accent: #6366f1;
+  --color-accent-2: #8b5cf6;
+  --color-accent-3: #22d3ee;
+  --color-accent-warm: #f472b6;
+
+  --shadow-glow: 0 0 60px rgba(99, 102, 241, 0.25);
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: white;
+}
+
+.text-gradient {
+  background: linear-gradient(120deg, #a5b4fc 0%, #c4b5fd 35%, #67e8f9 70%, #f0abfc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glass-panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.grid-overlay {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
