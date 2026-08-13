@@ -26,7 +26,7 @@ export function Hero() {
 
           <Reveal delay={0.16}>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-[color:var(--color-text-muted)]">
-              Коворкинг и девять штатных экспертов рядом: продакт-менеджмент, AI, SEO, юрист, DevOps и frontend.
+              Коворкинг и десять штатных экспертов рядом: продакт-менеджмент, AI, SEO, юрист, DevOps, frontend и HR.
               Приходите с идеей — уходите с продуктом.
             </p>
           </Reveal>

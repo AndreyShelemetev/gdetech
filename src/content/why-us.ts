@@ -8,7 +8,7 @@ export const comparisonRows: ComparisonRow[] = [
   {
     aspect: "Формат поддержки",
     others: "Стол, Wi-Fi и общее пространство",
-    gdetech: "Стол + команда из 9 штатных экспертов рядом",
+    gdetech: "Стол + команда из 10 штатных экспертов рядом",
   },
   {
     aspect: "Менторство",

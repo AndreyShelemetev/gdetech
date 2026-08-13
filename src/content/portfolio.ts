@@ -16,11 +16,6 @@ export const residents: PortfolioCompany[] = [
     url: "https://emplyflow.ru/",
   },
   {
-    name: "ImbaHost",
-    description: "Хостинг игровых серверов с поддержкой 24/7.",
-    url: "https://imbahost.ru/",
-  },
-  {
     name: "FinOps (Co4c)",
     description: "Экономия до 70% на облачных расходах в Яндекс.Cloud.",
     url: "https://co4c.ru/",
@@ -77,5 +72,10 @@ export const ownProjects: PortfolioCompany[] = [
     name: "НаСмену.рф",
     description: "Сервис подработки для самозанятых с ежедневной оплатой.",
     url: "https://nasmenu.ru/",
+  },
+  {
+    name: "ImbaHost",
+    description: "Хостинг игровых серверов с поддержкой 24/7.",
+    url: "https://imba.host/",
   },
 ];
