@@ -78,4 +78,9 @@ export const ownProjects: PortfolioCompany[] = [
     description: "Хостинг игровых серверов с поддержкой 24/7.",
     url: "https://imba.host/",
   },
+  {
+    name: "ЗвонкиБот",
+    description: "Голосовые AI-агенты для входящих и исходящих звонков — для контакт-центров, медицины, гостинично-ресторанного бизнеса.",
+    url: "https://zvonkibot.ru/",
+  },
 ];
