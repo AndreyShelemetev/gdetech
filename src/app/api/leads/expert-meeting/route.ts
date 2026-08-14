@@ -4,6 +4,7 @@ import { expertMeetingSchema } from "@/lib/validation";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { sendLeadNotificationEmail } from "@/lib/email";
 import { team } from "@/content/team";
+import { getCurrentUser } from "@/lib/auth/session";
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req.headers);
@@ -25,8 +26,9 @@ export async function POST(req: NextRequest) {
   }
 
   const { name, email, phone, expertSlug, message } = parsed.data;
+  const user = await getCurrentUser();
   await prisma.expertMeetingRequest.create({
-    data: { name, email, phone, expertSlug, message: message || null },
+    data: { name, email, phone, expertSlug, message: message || null, userId: user?.id },
   });
 
   const expert = team.find((member) => member.slug === expertSlug);

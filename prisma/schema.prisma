@@ -30,14 +30,16 @@ enum LeadStatus {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  email         String         @unique
-  displayName   String?
-  role          UserRole       @default(user)
-  status        UserStatus     @default(active)
-  createdAt     DateTime       @default(now())
-  authIdentities AuthIdentity[]
-  authSessions  AuthSession[]
+  id                    String                 @id @default(cuid())
+  email                 String                 @unique
+  displayName           String?
+  role                  UserRole               @default(user)
+  status                UserStatus             @default(active)
+  createdAt             DateTime               @default(now())
+  authIdentities        AuthIdentity[]
+  authSessions          AuthSession[]
+  hubApplications       HubApplication[]
+  expertMeetingRequests ExpertMeetingRequest[]
 
   @@map("users")
 }
@@ -87,6 +89,8 @@ model EmailAuthCode {
 
 model HubApplication {
   id                 String     @id @default(cuid())
+  userId             String?
+  user               User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
   name               String
   email              String
   phone              String
@@ -94,11 +98,14 @@ model HubApplication {
   status             LeadStatus @default(new)
   createdAt          DateTime   @default(now())
 
+  @@index([userId])
   @@map("hub_applications")
 }
 
 model ExpertMeetingRequest {
   id         String     @id @default(cuid())
+  userId     String?
+  user       User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
   name       String
   email      String
   phone      String
@@ -107,5 +114,6 @@ model ExpertMeetingRequest {
   status     LeadStatus @default(new)
   createdAt  DateTime   @default(now())
 
+  @@index([userId])
   @@map("expert_meeting_requests")
 }

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { hubApplicationSchema } from "@/lib/validation";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { sendLeadNotificationEmail } from "@/lib/email";
+import { getCurrentUser } from "@/lib/auth/session";
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req.headers);
@@ -25,7 +26,10 @@ export async function POST(req: NextRequest) {
   }
 
   const { name, email, phone, projectDescription } = parsed.data;
-  await prisma.hubApplication.create({ data: { name, email, phone, projectDescription } });
+  const user = await getCurrentUser();
+  await prisma.hubApplication.create({
+    data: { name, email, phone, projectDescription, userId: user?.id },
+  });
 
   sendLeadNotificationEmail(`Новая заявка на вступление — ${name}`, [
     ["Имя", name],

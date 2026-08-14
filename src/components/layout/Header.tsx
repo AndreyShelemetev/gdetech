@@ -44,6 +44,9 @@ export function Header() {
           <div className="hidden items-center gap-3 lg:flex">
             {user ? (
               <>
+                <Link href="/account" className="text-sm text-[color:var(--color-text-muted)] hover:text-white">
+                  Личный кабинет
+                </Link>
                 {user.role === "admin" ? (
                   <Link href="/admin/leads" className="text-sm text-[color:var(--color-accent-3)] hover:underline">
                     Админка
@@ -98,6 +101,13 @@ export function Header() {
               <div className="my-2 h-px bg-[color:var(--color-border)]" />
               {user ? (
                 <>
+                  <Link
+                    href="/account"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="rounded-lg px-3 py-2.5 text-sm text-[color:var(--color-text-muted)] hover:bg-white/5 hover:text-white"
+                  >
+                    Личный кабинет
+                  </Link>
                   {user.role === "admin" ? (
                     <Link href="/admin/leads" className="rounded-lg px-3 py-2.5 text-sm text-[color:var(--color-accent-3)]">
                       Админка
