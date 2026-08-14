@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { hubApplicationSchema } from "@/lib/validation";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { sendLeadNotificationEmail } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req.headers);
@@ -25,6 +26,13 @@ export async function POST(req: NextRequest) {
 
   const { name, email, phone, projectDescription } = parsed.data;
   await prisma.hubApplication.create({ data: { name, email, phone, projectDescription } });
+
+  sendLeadNotificationEmail(`Новая заявка на вступление — ${name}`, [
+    ["Имя", name],
+    ["E-mail", email],
+    ["Телефон", phone],
+    ["Проект", projectDescription],
+  ]).catch((error) => console.error("Не удалось отправить уведомление о заявке", error));
 
   return NextResponse.json({ ok: true });
 }

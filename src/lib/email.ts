@@ -43,3 +43,41 @@ export async function sendLoginCodeEmail(email: string, code: string) {
 
   return { delivered: true as const };
 }
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+export async function sendLeadNotificationEmail(subject: string, fields: Array<[string, string]>) {
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (!adminEmail) return;
+
+  const fromName = process.env.SMTP_FROM_NAME ?? "GdeTech";
+  const fromEmail = process.env.SMTP_FROM_EMAIL ?? "noreply@gdetech.ru";
+
+  const client = getTransporter();
+
+  if (!client) {
+    console.log(`[dev email] Уведомление "${subject}" для ${adminEmail}`);
+    return;
+  }
+
+  const text = fields.map(([label, value]) => `${label}: ${value}`).join("\n");
+  const html = `<table cellpadding="0" cellspacing="0">${fields
+    .map(
+      ([label, value]) =>
+        `<tr><td style="padding:4px 16px 4px 0;color:#666;white-space:nowrap;vertical-align:top;">${escapeHtml(label)}</td><td>${escapeHtml(value).replace(/\n/g, "<br>")}</td></tr>`,
+    )
+    .join("")}</table>`;
+
+  await client.sendMail({
+    from: `"${fromName}" <${fromEmail}>`,
+    to: adminEmail,
+    subject,
+    text,
+    html,
+  });
+}

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { expertMeetingSchema } from "@/lib/validation";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { sendLeadNotificationEmail } from "@/lib/email";
+import { team } from "@/content/team";
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req.headers);
@@ -26,6 +28,17 @@ export async function POST(req: NextRequest) {
   await prisma.expertMeetingRequest.create({
     data: { name, email, phone, expertSlug, message: message || null },
   });
+
+  const expert = team.find((member) => member.slug === expertSlug);
+  const expertLabel = expert ? `${expert.name} — ${expert.role}` : expertSlug;
+
+  sendLeadNotificationEmail(`Новая заявка на встречу с экспертом — ${name}`, [
+    ["Имя", name],
+    ["E-mail", email],
+    ["Телефон", phone],
+    ["Эксперт", expertLabel],
+    ["Сообщение", message || "—"],
+  ]).catch((error) => console.error("Не удалось отправить уведомление о заявке", error));
 
   return NextResponse.json({ ok: true });
 }
