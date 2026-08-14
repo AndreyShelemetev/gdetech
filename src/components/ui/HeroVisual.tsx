@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { Avatar } from "@/components/ui/Avatar";
+import { UsersIcon, RocketIcon } from "@/components/ui/icons";
 import { team } from "@/content/team";
 import { residents } from "@/content/portfolio";
 
@@ -68,8 +69,8 @@ export function HeroVisual() {
           y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
         }}
       >
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-[color:var(--color-accent)] to-[color:var(--color-accent-2)] text-sm">
-          🧑‍💻
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-[color:var(--color-accent)] to-[color:var(--color-accent-2)]">
+          <UsersIcon className="h-5 w-5 text-white" />
         </span>
         <div>
           <p className="font-[family-name:var(--font-display)] text-lg font-bold leading-none">{team.length}</p>
@@ -87,8 +88,8 @@ export function HeroVisual() {
           y: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1.4 },
         }}
       >
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-[color:var(--color-accent-3)] to-[color:var(--color-accent)] text-sm">
-          🚀
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-[color:var(--color-accent-3)] to-[color:var(--color-accent)]">
+          <RocketIcon className="h-5 w-5 text-white" />
         </span>
         <div>
           <p className="font-[family-name:var(--font-display)] text-lg font-bold leading-none">{residents.length}+</p>

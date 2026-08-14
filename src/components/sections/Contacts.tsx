@@ -1,7 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
-import { MailIcon, TelegramIcon, VkIcon } from "@/components/ui/icons";
+import { MailIcon, TelegramIcon, VkIcon, PinIcon, PhoneIcon } from "@/components/ui/icons";
 import { legal } from "@/content/legal";
 
 const mapSrc = `https://yandex.ru/map-widget/v1/?text=${encodeURIComponent(legal.addressFull)}&z=16`;
@@ -30,7 +30,7 @@ export function Contacts() {
               <h3 className="font-[family-name:var(--font-display)] text-xl font-semibold">Как связаться</h3>
               <ul className="mt-6 space-y-4 text-sm">
                 <li className="flex items-start gap-3">
-                  <span className="mt-0.5 text-[color:var(--color-text-faint)]">📍</span>
+                  <PinIcon className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--color-text-faint)]" />
                   <span className="text-[color:var(--color-text-muted)]">{legal.addressFull}</span>
                 </li>
                 <li className="flex items-center gap-3">
@@ -40,7 +40,7 @@ export function Contacts() {
                   </a>
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="text-[color:var(--color-text-faint)]">☎</span>
+                  <PhoneIcon className="h-4 w-4 shrink-0 text-[color:var(--color-text-faint)]" />
                   <a href={`tel:${legal.phoneHref}`} className="text-[color:var(--color-text-muted)] hover:text-white">
                     {legal.phoneDisplay}
                   </a>

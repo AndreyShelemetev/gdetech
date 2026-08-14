@@ -1,6 +1,13 @@
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
+import { BoltIcon, ChipIcon, MegaphoneIcon } from "@/components/ui/icons";
 import { vibeCodingServices } from "@/content/services";
+
+const ICONS = {
+  bolt: BoltIcon,
+  chip: ChipIcon,
+  megaphone: MegaphoneIcon,
+};
 
 export function VibeCoding() {
   return (
@@ -13,7 +20,7 @@ export function VibeCoding() {
 
             <div className="relative">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-white backdrop-blur-sm">
-                🔥 Новое
+                Новое
               </span>
 
               <h2 className="mt-5 max-w-xl font-[family-name:var(--font-display)] text-3xl font-bold leading-tight text-white sm:text-4xl">
@@ -25,19 +32,22 @@ export function VibeCoding() {
               </p>
 
               <div className="mt-10 grid gap-5 sm:grid-cols-3">
-                {vibeCodingServices.map((item, index) => (
-                  <Reveal key={item.title} delay={index * 0.08}>
-                    <div className="h-full rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/15">
-                      <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/15 text-xl">
-                        {item.icon}
-                      </span>
-                      <h3 className="mt-4 font-[family-name:var(--font-display)] text-lg font-semibold text-white">
-                        {item.title}
-                      </h3>
-                      <p className="mt-2 text-sm leading-relaxed text-white/80">{item.description}</p>
-                    </div>
-                  </Reveal>
-                ))}
+                {vibeCodingServices.map((item, index) => {
+                  const Icon = ICONS[item.icon];
+                  return (
+                    <Reveal key={item.title} delay={index * 0.08}>
+                      <div className="h-full rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/15">
+                        <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/15">
+                          <Icon className="h-5 w-5 text-white" />
+                        </span>
+                        <h3 className="mt-4 font-[family-name:var(--font-display)] text-lg font-semibold text-white">
+                          {item.title}
+                        </h3>
+                        <p className="mt-2 text-sm leading-relaxed text-white/80">{item.description}</p>
+                      </div>
+                    </Reveal>
+                  );
+                })}
               </div>
             </div>
           </div>

@@ -14,12 +14,12 @@ export function Services() {
           description="Цель GdeTech — экосистема для создания и развития инновационных IT-проектов."
         />
 
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((service, index) => (
             <Reveal key={service.title} delay={(index % 3) * 0.08}>
-              <GlassCard>
-                <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold">{service.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-[color:var(--color-text-muted)]">
+              <GlassCard className="p-8">
+                <h3 className="font-[family-name:var(--font-display)] text-xl font-semibold">{service.title}</h3>
+                <p className="mt-2.5 text-base leading-relaxed text-[color:var(--color-text-muted)]">
                   {service.description}
                 </p>
               </GlassCard>
