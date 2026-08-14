@@ -40,6 +40,7 @@ export const services: ServiceItem[] = [
 export interface VibeCodingItem {
   title: string;
   description: string;
+  icon: string;
 }
 
 export const vibeCodingServices: VibeCodingItem[] = [
@@ -47,14 +48,17 @@ export const vibeCodingServices: VibeCodingItem[] = [
     title: "Вайб-кодинг",
     description:
       "Соберём рабочий MVP вместе с вами через AI-инструменты — быстро, без раздутой команды разработки.",
+    icon: "⚡",
   },
   {
     title: "Подписки на нейросети",
     description:
       "Поможем оформить и купить доступ к популярным нейросетям — ChatGPT Plus, Claude, Midjourney и другим.",
+    icon: "🧠",
   },
   {
     title: "Настройка рекламы",
     description: "Настроим Яндекс.Директ, VK Рекламу и таргет — приведём первых пользователей к продукту.",
+    icon: "📣",
   },
 ];

@@ -9,7 +9,7 @@ export function Residents() {
       <Container>
         <SectionHeading
           eyebrow="Резиденты"
-          title="Стартапы, которые выросли в хабе"
+          title="Стартапы, в которые мы инвестировали"
           description="Часть команд прошла через GdeTech и запустила собственные продукты в разных нишах."
         />
 
