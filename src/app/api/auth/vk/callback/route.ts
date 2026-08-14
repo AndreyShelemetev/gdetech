@@ -19,6 +19,10 @@ export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
+  // VK ID может вернуть свой device_id прямо в редиректе на callback — если он
+  // есть, обмен кода нужно делать именно с ним, а не с тем, что сгенерировали
+  // мы сами на старте (иначе VK отвечает "device_id is invalid").
+  const deviceIdFromRedirect = url.searchParams.get("device_id");
   const rawStoredState = req.cookies.get(STATE_COOKIE)?.value;
 
   if (!code || !state || !rawStoredState) {
@@ -40,7 +44,7 @@ export async function GET(req: NextRequest) {
     const tokenResponse = await exchangeVkCode({
       code,
       codeVerifier: stored.codeVerifier,
-      deviceId: stored.deviceId,
+      deviceId: deviceIdFromRedirect || stored.deviceId,
       state: stored.state,
     });
     const profile = await fetchVkProfile(tokenResponse.access_token);
