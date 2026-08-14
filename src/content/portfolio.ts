@@ -69,7 +69,7 @@ export const ownProjects: PortfolioCompany[] = [
     url: "https://naidiai.ru/",
   },
   {
-    name: "НаСмену.рф",
+    name: "НаСмену.ру",
     description: "Сервис подработки для самозанятых с ежедневной оплатой.",
     url: "https://nasmenu.ru/",
   },
