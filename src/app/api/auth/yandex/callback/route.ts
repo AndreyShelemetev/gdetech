@@ -3,6 +3,7 @@ import { exchangeYandexCode, fetchYandexProfile } from "@/lib/auth/yandex";
 import { loginWithOAuthProfile } from "@/lib/auth/oauth";
 import { attachSessionCookie } from "@/lib/auth/session";
 import { getClientIp } from "@/lib/rate-limit";
+import { absoluteUrl } from "@/lib/site-url";
 
 const STATE_COOKIE = "yandex_oauth_state";
 const SUCCESS_URL = process.env.YANDEX_SUCCESS_URL ?? "/";
@@ -15,7 +16,7 @@ export async function GET(req: NextRequest) {
   const storedState = req.cookies.get(STATE_COOKIE)?.value;
 
   if (!code || !state || !storedState || state !== storedState) {
-    return NextResponse.redirect(new URL(ERROR_URL, req.url));
+    return NextResponse.redirect(absoluteUrl(ERROR_URL, req));
   }
 
   try {
@@ -32,12 +33,12 @@ export async function GET(req: NextRequest) {
       { userAgent: req.headers.get("user-agent"), ip: getClientIp(req.headers) },
     );
 
-    const response = NextResponse.redirect(new URL(SUCCESS_URL, req.url));
+    const response = NextResponse.redirect(absoluteUrl(SUCCESS_URL, req));
     attachSessionCookie(response, token, expiresAt);
     response.cookies.set(STATE_COOKIE, "", { path: "/", maxAge: 0 });
     return response;
   } catch (error) {
     console.error("Yandex OAuth error", error);
-    return NextResponse.redirect(new URL(ERROR_URL, req.url));
+    return NextResponse.redirect(absoluteUrl(ERROR_URL, req));
   }
 }

@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { VK_AUTH_ENABLED, getVkAuthorizeUrl, generatePkcePair, generateDeviceId } from "@/lib/auth/vk";
 import { randomState } from "@/lib/auth/oauth";
+import { absoluteUrl } from "@/lib/site-url";
 
 const STATE_COOKIE = "vk_oauth_state";
 
 export async function GET(req: NextRequest) {
   if (!VK_AUTH_ENABLED) {
-    return NextResponse.redirect(new URL("/?auth_error=vk_disabled", req.url));
+    return NextResponse.redirect(absoluteUrl("/?auth_error=vk_disabled", req));
   }
 
   const state = randomState();

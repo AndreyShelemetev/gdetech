@@ -3,6 +3,7 @@ import { exchangeVkCode, fetchVkProfile } from "@/lib/auth/vk";
 import { loginWithOAuthProfile } from "@/lib/auth/oauth";
 import { attachSessionCookie } from "@/lib/auth/session";
 import { getClientIp } from "@/lib/rate-limit";
+import { absoluteUrl } from "@/lib/site-url";
 
 const STATE_COOKIE = "vk_oauth_state";
 const SUCCESS_URL = process.env.VK_SUCCESS_URL ?? "/";
@@ -21,18 +22,18 @@ export async function GET(req: NextRequest) {
   const rawStoredState = req.cookies.get(STATE_COOKIE)?.value;
 
   if (!code || !state || !rawStoredState) {
-    return NextResponse.redirect(new URL(ERROR_URL, req.url));
+    return NextResponse.redirect(absoluteUrl(ERROR_URL, req));
   }
 
   let stored: StoredVkState;
   try {
     stored = JSON.parse(rawStoredState) as StoredVkState;
   } catch {
-    return NextResponse.redirect(new URL(ERROR_URL, req.url));
+    return NextResponse.redirect(absoluteUrl(ERROR_URL, req));
   }
 
   if (state !== stored.state) {
-    return NextResponse.redirect(new URL(ERROR_URL, req.url));
+    return NextResponse.redirect(absoluteUrl(ERROR_URL, req));
   }
 
   try {
@@ -53,12 +54,12 @@ export async function GET(req: NextRequest) {
       { userAgent: req.headers.get("user-agent"), ip: getClientIp(req.headers) },
     );
 
-    const response = NextResponse.redirect(new URL(SUCCESS_URL, req.url));
+    const response = NextResponse.redirect(absoluteUrl(SUCCESS_URL, req));
     attachSessionCookie(response, token, expiresAt);
     response.cookies.set(STATE_COOKIE, "", { path: "/", maxAge: 0 });
     return response;
   } catch (error) {
     console.error("VK OAuth error", error);
-    return NextResponse.redirect(new URL(ERROR_URL, req.url));
+    return NextResponse.redirect(absoluteUrl(ERROR_URL, req));
   }
 }

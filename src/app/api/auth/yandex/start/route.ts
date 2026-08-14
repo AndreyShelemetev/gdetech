@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { YANDEX_AUTH_ENABLED, getYandexAuthorizeUrl } from "@/lib/auth/yandex";
 import { randomState } from "@/lib/auth/oauth";
+import { absoluteUrl } from "@/lib/site-url";
 
 const STATE_COOKIE = "yandex_oauth_state";
 
 export async function GET(req: NextRequest) {
   if (!YANDEX_AUTH_ENABLED) {
-    return NextResponse.redirect(new URL("/?auth_error=yandex_disabled", req.url));
+    return NextResponse.redirect(absoluteUrl("/?auth_error=yandex_disabled", req));
   }
 
   const state = randomState();
