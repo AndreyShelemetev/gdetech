@@ -41,6 +41,7 @@ export async function GET(req: NextRequest) {
       code,
       codeVerifier: stored.codeVerifier,
       deviceId: stored.deviceId,
+      state: stored.state,
     });
     const profile = await fetchVkProfile(tokenResponse.access_token);
 

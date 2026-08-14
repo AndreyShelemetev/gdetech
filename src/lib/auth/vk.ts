@@ -36,7 +36,8 @@ export function getVkAuthorizeUrl(params: {
   url.searchParams.set("scope", "email");
   url.searchParams.set("state", params.state);
   url.searchParams.set("code_challenge", params.codeChallenge);
-  url.searchParams.set("code_challenge_method", "s256");
+  // VK ID проверяет регистр строго — должно быть "S256", а не "s256".
+  url.searchParams.set("code_challenge_method", "S256");
   url.searchParams.set("device_id", params.deviceId);
   return url.toString();
 }
@@ -51,6 +52,7 @@ export async function exchangeVkCode(params: {
   code: string;
   codeVerifier: string;
   deviceId: string;
+  state: string;
 }): Promise<VkTokenResponse> {
   const { clientId, redirectUri } = getConfig();
 
@@ -64,18 +66,33 @@ export async function exchangeVkCode(params: {
       client_id: clientId,
       device_id: params.deviceId,
       redirect_uri: redirectUri,
+      // VK ID сверяет state и на этапе обмена кода, не только на authorize.
+      state: params.state,
     }),
   });
 
+  const raw = await response.text();
+
   if (!response.ok) {
-    throw new Error(`VK token exchange failed: ${response.status}`);
+    throw new Error(`VK token exchange failed: ${response.status} ${raw}`);
   }
 
-  return (await response.json()) as VkTokenResponse;
+  let data: VkTokenResponse;
+  try {
+    data = JSON.parse(raw) as VkTokenResponse;
+  } catch {
+    throw new Error(`VK token exchange returned non-JSON response: ${raw}`);
+  }
+
+  if (!data.access_token) {
+    throw new Error(`VK token exchange response missing access_token: ${raw}`);
+  }
+
+  return data;
 }
 
 interface VkUserInfoResponse {
-  user: {
+  user?: {
     user_id: string;
     first_name?: string;
     last_name?: string;
@@ -98,11 +115,23 @@ export async function fetchVkProfile(accessToken: string): Promise<VkProfile> {
     body: new URLSearchParams({ client_id: clientId, access_token: accessToken }),
   });
 
+  const raw = await response.text();
+
   if (!response.ok) {
-    throw new Error(`VK profile fetch failed: ${response.status}`);
+    throw new Error(`VK profile fetch failed: ${response.status} ${raw}`);
   }
 
-  const data = (await response.json()) as VkUserInfoResponse;
+  let data: VkUserInfoResponse;
+  try {
+    data = JSON.parse(raw) as VkUserInfoResponse;
+  } catch {
+    throw new Error(`VK profile fetch returned non-JSON response: ${raw}`);
+  }
+
+  if (!data.user) {
+    throw new Error(`VK profile fetch response missing "user": ${raw}`);
+  }
+
   const name = [data.user.first_name, data.user.last_name].filter(Boolean).join(" ").trim();
 
   return {
